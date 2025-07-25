@@ -1,0 +1,135 @@
+import React, { useState } from "react";
+import { Eye, EyeOff, CreditCard, Shield, Lock, User } from "lucide-react";
+
+function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = () => {
+    console.log("Login attempt:", formData);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10 flex items-center justify-center p-4">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-10 left-10 w-20 h-20 border border-primary rounded-full"></div>
+        <div className="absolute top-32 right-20 w-16 h-16 bg-secondary/20 rounded-full"></div>
+        <div className="absolute bottom-20 left-32 w-24 h-24 border border-accent rounded-full"></div>
+        <div className="absolute bottom-32 right-10 w-12 h-12 bg-primary/20 rounded-full"></div>
+      </div>
+
+      <div className="card w-full max-w-md bg-base-100 shadow-2xl relative z-10">
+        <div className="card-body p-8">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-xl flex items-center justify-center">
+                <CreditCard className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                PayGasm
+              </span>
+            </div>
+            <h1 className="text-3xl font-bold text-base-content">
+              Welcome Back
+            </h1>
+            <p className="text-base-content/70 mt-2">
+              Sign in to your payment dashboard
+            </p>
+          </div>
+
+          {/* Login Form */}
+          <div className="space-y-6">
+            {/* Username Field */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-medium flex items-center gap-2">
+                  <User className="w-4 h-4" />
+                  Username
+                </span>
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleInputChange}
+                  placeholder="Enter your username"
+                  className="input input-bordered w-full pl-12 focus:input-primary transition-all duration-300"
+                  required
+                />
+                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-base-content/50" />
+              </div>
+            </div>
+
+            {/* Password Field */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-medium flex items-center gap-2">
+                  <Lock className="w-4 h-4" />
+                  Password
+                </span>
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  placeholder="Enter your password"
+                  className="input input-bordered w-full pl-12 pr-12 focus:input-primary transition-all duration-300"
+                  required
+                />
+                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-base-content/50" />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-base-content/50 hover:text-base-content transition-colors">
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </button>
+              </div>
+            </div>
+            {/* Login Button */}
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="btn btn-primary w-full btn-lg group hover:shadow-lg transition-all duration-300">
+              <Shield className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+              Sign In Securely
+            </button>
+          </div>
+
+          {/* Footer */}
+          <div className="text-center mt-8 pt-6 border-t border-base-300">
+            <p className="text-xs text-base-content/50">
+              &copy; 2025 PayGasm. Secure payment processing.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Login;
