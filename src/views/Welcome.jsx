@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   ArrowRight,
   CreditCard,
@@ -26,18 +27,18 @@ function Welcome() {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
             <li>
-              <a
-                href="/"
+              <Link
+                to="/"
                 className="btn btn-ghost hover:bg-primary/10 transition-all duration-300">
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/login"
+              <Link
+                to="/login"
                 className="btn btn-ghost hover:bg-primary/10 transition-all duration-300">
                 Login
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -61,10 +62,10 @@ function Welcome() {
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-lg">
               <li>
-                <a href="/">Home</a>
+                <Link to="/">Home</Link>
               </li>
               <li>
-                <a href="/login">Login</a>
+                <Link to="/login">Login</Link>
               </li>
             </ul>
           </div>

@@ -1,12 +1,25 @@
-import React, { useState } from "react";
-import { Eye, EyeOff, CreditCard, Shield, Lock, User } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Eye, EyeOff, CreditCard, Shield, Lock, Mail } from "lucide-react";
+import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function Login() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
+
+  // Cek apakah user sudah login
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -19,8 +32,30 @@ function Login() {
     });
   };
 
-  const handleSubmit = () => {
-    console.log("Login attempt:", formData);
+  const handleSubmit = async () => {
+    if (!formData.email || !formData.password) {
+      toast.error("Email dan password tidak boleh kosong!");
+      return;
+    }
+    setLoading(true);
+    try {
+      const response = await axios.post("http://localhost:1031/api/login", {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      const { token, user } = response.data;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      toast.success("Login successful!");
+      navigate("/dashboard");
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -59,22 +94,22 @@ function Login() {
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-medium flex items-center gap-2">
-                  <User className="w-4 h-4" />
-                  Username
+                  <Mail className="w-4 h-4" />
+                  Email
                 </span>
               </label>
               <div className="relative">
                 <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  value={formData.username}
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
                   onChange={handleInputChange}
-                  placeholder="Enter your username"
-                  className="input input-bordered w-full pl-12 focus:input-primary transition-all duration-300"
+                  placeholder="Enter your Email"
+                  className="input input-bordered w-full pl-12 focus:input-primary"
                   required
                 />
-                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-base-content/50" />
+                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-base-content/50" />
               </div>
             </div>
 
@@ -94,7 +129,7 @@ function Login() {
                   value={formData.password}
                   onChange={handleInputChange}
                   placeholder="Enter your password"
-                  className="input input-bordered w-full pl-12 pr-12 focus:input-primary transition-all duration-300"
+                  className="input input-bordered w-full pl-12 pr-12 focus:input-primary"
                   required
                 />
                 <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-base-content/50" />
@@ -115,14 +150,25 @@ function Login() {
               type="button"
               onClick={handleSubmit}
               className="btn btn-primary w-full btn-lg group hover:shadow-lg transition-all duration-300">
-              <Shield className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-              Sign In Securely
+              {loading ? (
+                <>
+                  <span className="loading loading-spinner loading-sm mr-2"></span>
+                  Signing In...
+                </>
+              ) : (
+                <>
+                  <Shield className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                  Sign In Securely
+                </>
+              )}
             </button>
           </div>
-
           {/* Footer */}
-          <div className="text-center mt-8 pt-6 border-t border-base-300">
-            <p className="text-xs text-base-content/50">
+          <div className="text-center mt-4 pt-2 border-t border-base-300">
+            <Link to="/" className="btn btn-error">
+              Back to Home
+            </Link>
+            <p className="text-xs text-base-content/50 mt-2">
               &copy; 2025 PayGasm. Secure payment processing.
             </p>
           </div>
