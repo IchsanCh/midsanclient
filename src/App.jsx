@@ -4,6 +4,8 @@ import Welcome from "./views/Welcome";
 import Login from "./views/Login";
 import Page from "./views/Page";
 import Dashboard from "./views/user/Dashboard";
+import RedirectRules from "./views/user/Redirect";
+import Payment from "./views/user/Payment";
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -32,6 +34,22 @@ function App() {
           element={
             <Page title="Dashboard">
               <Dashboard />
+            </Page>
+          }
+        />
+        <Route
+          path="/redirect"
+          element={
+            <Page title="Redirect">
+              <RedirectRules />
+            </Page>
+          }
+        />
+        <Route
+          path="/payment"
+          element={
+            <Page title="Payment">
+              <Payment />
             </Page>
           }
         />
